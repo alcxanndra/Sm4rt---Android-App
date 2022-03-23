@@ -10,7 +10,7 @@
         android:id="@+id/imageView"
         android:layout_width="295dp"
         android:layout_height="298dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/play_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/logo" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/play_button"
         android:layout_width="297dp"
         android:layout_height="77dp"
         android:text="@string/play_button"
