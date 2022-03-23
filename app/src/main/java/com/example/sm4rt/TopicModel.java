@@ -5,11 +5,19 @@ import android.os.Parcelable;
 
 public class TopicModel implements Parcelable {
 
+    private String id;
     private String name;
     private String description;
     private Integer imageId;
 
     public TopicModel(String name, String description, Integer imageId) {
+        this.name = name;
+        this.description = description;
+        this.imageId = imageId;
+    }
+
+    public TopicModel(String id, String name, String description, Integer imageId) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.imageId = imageId;

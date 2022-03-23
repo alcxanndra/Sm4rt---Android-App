@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHolder> {
@@ -47,6 +48,13 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
             topicImage.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), topic.getImageId()));
         }
 
+    }
+
+    // Filter RecyclerView items
+    public void filterList(ArrayList<TopicModel> filterList) {
+        topicList = filterList;
+        // Notify adapter of change in recycler view data.
+        notifyDataSetChanged();
     }
 
     // Create new views (invoked by the layout manager)
