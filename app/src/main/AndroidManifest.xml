@@ -13,9 +13,6 @@
             android:name=".activity.QuestionsPage"
             android:exported="false" />
         <activity
-            android:name=".activity.FactsPage"
-            android:exported="false" />
-        <activity
             android:name=".activity.TopicsPage"
             android:exported="false" />
         <activity
@@ -27,6 +24,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.sm4rt.shareimage.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/paths" />
+        </provider>
+
     </application>
 
 </manifest>

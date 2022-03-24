@@ -1,19 +1,19 @@
 {
   "questions": [
     {
-      "title": "Question 1",
+      "title": "Profetul Mahomed (570 d.Hr.) s-a nascut in orasul...",
       "topic": "History",
-      "answer": "Answer 1"
+      "answer": "Mecca, Arabia"
     },
     {
-      "title": "Question 2",
+      "title": "Profetul Mahomed s-a intalnit in muntii din apropierea orasului Mecca cu...",
       "topic": "History",
-      "answer": "Answer 2"
+      "answer": "Arhanghelul Gabriel, care i-a spus ca oamenii trebuie sa venereze un singur Dumnezeu (Allah)"
     },
     {
-      "title": "Question 3",
+      "title": "Aparitia Arhanghelului Gabriel in fata Profetului Mahomed a marcat inceputul religiei...",
       "topic": "History",
-      "answer": "Answer 3"
+      "answer": "Islamice"
     }
   ]
 }

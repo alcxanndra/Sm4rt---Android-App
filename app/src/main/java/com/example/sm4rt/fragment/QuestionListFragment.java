@@ -1,7 +1,7 @@
 package com.example.sm4rt.fragment;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
+import static com.example.sm4rt.fragment.TopicListFragment.TOPIC_NAME;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,10 +20,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sm4rt.util.OnItemClickListener;
 import com.example.sm4rt.R;
-import com.example.sm4rt.adapter.TopicAdapter;
-import com.example.sm4rt.model.TopicModel;
+import com.example.sm4rt.adapter.QuestionAdapter;
+import com.example.sm4rt.model.QuestionModel;
+import com.example.sm4rt.util.OnItemClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,26 +33,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class FirstFragment extends Fragment implements OnItemClickListener<TopicModel> {
+public class QuestionListFragment extends Fragment implements OnItemClickListener<QuestionModel> {
 
-    private TopicAdapter adapter;
+    private QuestionAdapter adapter;
     private RecyclerView rv;
     private SearchView searchView = null;
+    private Button seeAnswerBtn;
     private SearchView.OnQueryTextListener queryTextListener;
-    public static String TOPIC_NAME = "topic name";
-    public static String TOPIC = "topic";
+    public static String QUESTION = "question";
 
-    public static List<TopicModel> topicList = new ArrayList<>();
+    public static List<QuestionModel> questionList = new ArrayList<>();
 
-    public FirstFragment() {
-        super(R.layout.fragment_first);
+    public QuestionListFragment() {
+        super(R.layout.fragment_question_list);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_first, container, false);
+        return inflater.inflate(R.layout.fragment_topic_list, container, false);
     }
 
     @Override
@@ -61,13 +63,19 @@ public class FirstFragment extends Fragment implements OnItemClickListener<Topic
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle
-            savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initializeTopicList();
+        Bundle bundle = getArguments();
+        String topicName = null;
 
-        adapter = new TopicAdapter(topicList, this);
+        if (bundle != null){
+            topicName = bundle.getString(TOPIC_NAME);
+        }
+
+        initializeQuestionList(topicName);
+
+        adapter = new QuestionAdapter(questionList, this);
         rv = view.findViewById(R.id.recycler_view);
         rv.setAdapter(adapter);
     }
@@ -95,28 +103,24 @@ public class FirstFragment extends Fragment implements OnItemClickListener<Topic
     }
 
     private void filter(String text) {
-        ArrayList<TopicModel> filteredList = new ArrayList<>();
+        ArrayList<QuestionModel> filteredList = new ArrayList<>();
 
-        for (TopicModel item : topicList) {
-            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
+        for (QuestionModel item : questionList) {
+            if (item.getTitle().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
             }
         }
         if (filteredList.isEmpty()) {
-            Toast.makeText(this.getActivity(), "No topics found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getActivity(), "No questions found", Toast.LENGTH_SHORT).show();
         }
 
         adapter.filterList(filteredList);
     }
-
-    public static Integer getImage(Context c, String ImageName) {
-        return c.getResources().getIdentifier(ImageName, "drawable", c.getPackageName());
-    }
-
+    
     public String loadJSONFromAsset() {
         String json = null;
         try {
-            InputStream is = getActivity().getAssets().open("topics.json");
+            InputStream is = getActivity().getAssets().open("questions.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -129,18 +133,20 @@ public class FirstFragment extends Fragment implements OnItemClickListener<Topic
         return json;
     }
 
-    private void initializeTopicList(){
+    private void initializeQuestionList(String topicName){
         try {
             JSONObject obj = new JSONObject(loadJSONFromAsset());
-            JSONArray array = obj.getJSONArray("topics");
+            JSONArray array = obj.getJSONArray("questions");
 
             for (int i = 0; i < array.length(); i++) {
-                JSONObject topicJson = array.getJSONObject(i);
-                String topicName = topicJson.getString("name");
-                String topicDescription = topicJson.getString("description");
-                String topicImage = topicJson.getString("image");
+                JSONObject questionJson = array.getJSONObject(i);
+                String questionTitle = questionJson.getString("title");
+                String questionTopic = questionJson.getString("topic");
+                String questionAnswer = questionJson.getString("answer");
 
-                topicList.add(new TopicModel(topicName, topicDescription, getImage(getContext(), topicImage)));
+                if (topicName == null || (topicName != null && questionTopic.toLowerCase(Locale.ROOT).equals(topicName.toLowerCase()))) {
+                    questionList.add(new QuestionModel(questionTitle, questionTopic, questionAnswer));
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -148,21 +154,20 @@ public class FirstFragment extends Fragment implements OnItemClickListener<Topic
     }
 
     @Override
-    public void onItemClick(TopicModel item) {
+    public void onItemClick(QuestionModel item) {
         Bundle bundle = new Bundle();
 
-        bundle.putString(TOPIC_NAME, item.getName());
+        bundle.putParcelable(QUESTION, item);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        ThirdFragment thirdFragment = new ThirdFragment();
-        thirdFragment.setArguments(bundle);
+        QuestionFragment questionFragment = new QuestionFragment();
+        questionFragment.setArguments(bundle);
 
 //        Give id of container to be replaced and fragment to replace with
-        fragmentTransaction.replace(R.id.fragment_container, thirdFragment)
+        fragmentTransaction.replace(R.id.fragment_container, questionFragment)
                 .addToBackStack(null);
         fragmentTransaction.commit();
     }
-
 }

@@ -1,8 +1,6 @@
 package com.example.sm4rt.fragment;
 
-import static com.example.sm4rt.fragment.FirstFragment.TOPIC;
-import static com.example.sm4rt.fragment.FirstFragment.TOPIC_NAME;
-import static com.example.sm4rt.fragment.ThirdFragment.QUESTION;
+import static com.example.sm4rt.fragment.QuestionListFragment.QUESTION;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,12 +14,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sm4rt.R;
 import com.example.sm4rt.model.QuestionModel;
-import com.example.sm4rt.model.TopicModel;
 
-public class SecondFragment extends Fragment {
+public class QuestionFragment extends Fragment {
 
-    public SecondFragment() {
-        super(R.layout.fragment_second);
+    public QuestionFragment() {
+        super(R.layout.fragment_question);
     }
 
     @Nullable
