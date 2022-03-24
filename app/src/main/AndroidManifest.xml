@@ -10,10 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sm4rt">
         <activity
-            android:name=".TopicsPage"
+            android:name=".activity.QuestionsPage"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.FactsPage"
+            android:exported="false" />
+        <activity
+            android:name=".activity.TopicsPage"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

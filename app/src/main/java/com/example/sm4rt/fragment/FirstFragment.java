@@ -1,7 +1,8 @@
-package com.example.sm4rt;
+package com.example.sm4rt.fragment;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,23 +15,32 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.example.sm4rt.util.OnItemClickListener;
+import com.example.sm4rt.R;
+import com.example.sm4rt.adapter.TopicAdapter;
+import com.example.sm4rt.model.TopicModel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstFragment extends Fragment {
+public class FirstFragment extends Fragment implements OnItemClickListener<TopicModel> {
 
     private TopicAdapter adapter;
     private RecyclerView rv;
     private SearchView searchView = null;
     private SearchView.OnQueryTextListener queryTextListener;
+    public static String TOPIC_NAME = "topic name";
+    public static String TOPIC = "topic";
 
     public static List<TopicModel> topicList = new ArrayList<>();
 
@@ -57,7 +67,7 @@ public class FirstFragment extends Fragment {
 
         initializeTopicList();
 
-        adapter = new TopicAdapter(topicList);
+        adapter = new TopicAdapter(topicList, this);
         rv = view.findViewById(R.id.recycler_view);
         rv.setAdapter(adapter);
     }
@@ -99,8 +109,60 @@ public class FirstFragment extends Fragment {
         }
     }
 
-    private void initializeTopicList(){
-        topicList.add(new TopicModel("History", "Test your knowledge in history", R.drawable.history));
-        topicList.add(new TopicModel("Literature", "Test your knowledge in literature", R.drawable.literature));
+    public static Integer getImage(Context c, String ImageName) {
+        return c.getResources().getIdentifier(ImageName, "drawable", c.getPackageName());
     }
+
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getActivity().getAssets().open("topics.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+    private void initializeTopicList(){
+        try {
+            JSONObject obj = new JSONObject(loadJSONFromAsset());
+            JSONArray array = obj.getJSONArray("topics");
+
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject topicJson = array.getJSONObject(i);
+                String topicName = topicJson.getString("name");
+                String topicDescription = topicJson.getString("description");
+                String topicImage = topicJson.getString("image");
+
+                topicList.add(new TopicModel(topicName, topicDescription, getImage(getContext(), topicImage)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onItemClick(TopicModel item) {
+        Bundle bundle = new Bundle();
+
+        bundle.putString(TOPIC_NAME, item.getName());
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        ThirdFragment thirdFragment = new ThirdFragment();
+        thirdFragment.setArguments(bundle);
+
+//        Give id of container to be replaced and fragment to replace with
+        fragmentTransaction.replace(R.id.fragment_container, thirdFragment)
+                .addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 }

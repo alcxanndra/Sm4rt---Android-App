@@ -1,11 +1,11 @@
-package com.example.sm4rt;
+package com.example.sm4rt.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class TopicModel implements Parcelable {
 
-    private String id;
+    private Integer id;
     private String name;
     private String description;
     private Integer imageId;
@@ -16,7 +16,7 @@ public class TopicModel implements Parcelable {
         this.imageId = imageId;
     }
 
-    public TopicModel(String id, String name, String description, Integer imageId) {
+    public TopicModel(Integer id, String name, String description, Integer imageId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -30,6 +30,14 @@ public class TopicModel implements Parcelable {
         this.name = data[0];
         this.description = data[1];
         this.imageId = Integer.valueOf(data[2]);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

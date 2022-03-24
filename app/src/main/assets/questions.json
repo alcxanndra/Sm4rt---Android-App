@@ -1,0 +1,19 @@
+{
+  "questions": [
+    {
+      "title": "Question 1",
+      "topic": "History",
+      "answer": "Answer 1"
+    },
+    {
+      "title": "Question 2",
+      "topic": "History",
+      "answer": "Answer 2"
+    },
+    {
+      "title": "Question 3",
+      "topic": "History",
+      "answer": "Answer 3"
+    }
+  ]
+}

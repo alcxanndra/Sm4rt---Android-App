@@ -1,0 +1,29 @@
+{
+  "topics": [
+    {
+      "name": "History",
+      "description": "Questions about history",
+      "image": "history"
+    },
+    {
+      "name": "Literature",
+      "description": "Questions about literature",
+      "image": "literature"
+    },
+    {
+      "name": "Art",
+      "description": "Questions about art",
+      "image": "art"
+    },
+    {
+      "name": "Geography",
+      "description": "Questions about geography",
+      "image": "geography"
+    },
+    {
+      "name": "Science",
+      "description": "Questions about science",
+      "image": "science"
+    }
+  ]
+}
