@@ -116,10 +116,10 @@ public class ThirdFragment extends Fragment implements OnItemClickListener<Quest
             }
         }
         if (filteredList.isEmpty()) {
-            Toast.makeText(this.getActivity(), "No Data Found..", Toast.LENGTH_SHORT).show();
-        } else {
-            adapter.filterList(filteredList);
+            Toast.makeText(this.getActivity(), "No questions found", Toast.LENGTH_SHORT).show();
         }
+
+        adapter.filterList(filteredList);
     }
     
     public String loadJSONFromAsset() {

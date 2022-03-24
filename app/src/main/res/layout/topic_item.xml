@@ -13,7 +13,6 @@
         android:id="@+id/iv_picture"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="20dp"
         android:src="@drawable/quiz"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"

@@ -103,10 +103,10 @@ public class FirstFragment extends Fragment implements OnItemClickListener<Topic
             }
         }
         if (filteredList.isEmpty()) {
-            Toast.makeText(this.getActivity(), "No Data Found..", Toast.LENGTH_SHORT).show();
-        } else {
-            adapter.filterList(filteredList);
+            Toast.makeText(this.getActivity(), "No topics found", Toast.LENGTH_SHORT).show();
         }
+
+        adapter.filterList(filteredList);
     }
 
     public static Integer getImage(Context c, String ImageName) {
