@@ -59,13 +59,13 @@ public class TopicsPage extends AppCompatActivity implements BottomNavigationVie
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
                 Context c = bottomNavigationView.getContext();
-                Drawable d = c.getResources().getDrawable(c.getResources().getIdentifier("quiz_icon", "drawable", c.getPackageName()));
+                Drawable d = c.getResources().getDrawable(c.getResources().getIdentifier("logo", "drawable", c.getPackageName()));
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) d;
                 Bitmap bitmap = bitmapDrawable.getBitmap();
                 Uri uri = getImageToShare(bitmap);
 
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-                shareIntent.putExtra(Intent.EXTRA_TITLE, "Join me on Sm4rt!");
+                shareIntent.putExtra(Intent.EXTRA_TITLE, "Dear friend, join me on Sm4rt!");
                 shareIntent.setData(uri);
                 shareIntent.setType("image/*");
                 shareIntent.setClipData(ClipData.newRawUri("", uri));

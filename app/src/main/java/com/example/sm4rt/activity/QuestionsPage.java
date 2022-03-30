@@ -4,12 +4,20 @@ import static com.example.sm4rt.fragment.QuestionListFragment.QUESTION;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.sm4rt.R;
 import com.example.sm4rt.fragment.QuestionFragment;
@@ -20,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -43,13 +53,25 @@ public class QuestionsPage extends AppCompatActivity implements BottomNavigation
 
         switch (item.getItemId()) {
             case R.id.share:
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                sendIntent.setType("text/plain");
+                bottomNavigationView.getMenu().getItem(1).setChecked(true);
+                String shareText = "https://sm4rt.com/get_latest_version";
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
-                Intent shareIntent = Intent.createChooser(sendIntent, null);
-                startActivity(shareIntent);
+                Context c = bottomNavigationView.getContext();
+                Drawable d = c.getResources().getDrawable(c.getResources().getIdentifier("logo", "drawable", c.getPackageName()));
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) d;
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+                Uri uri = getImageToShare(bitmap);
+
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+                shareIntent.putExtra(Intent.EXTRA_TITLE, "Dear friend, join me on Sm4rt!");
+                shareIntent.setData(uri);
+                shareIntent.setType("image/*");
+                shareIntent.setClipData(ClipData.newRawUri("", uri));
+                shareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                startActivity(Intent.createChooser(shareIntent, null));
+                return true;
 
             case R.id.topics:
                 Intent topicIntent = new Intent(getApplicationContext(), TopicsPage.class);
@@ -74,6 +96,24 @@ public class QuestionsPage extends AppCompatActivity implements BottomNavigation
     private QuestionModel getRandomQuestion() {
         List<QuestionModel> questionList = initializeQuestionList();
         return questionList.get((int) (Math.random() * questionList.size()));
+    }
+
+    // Retrieving the url to share
+    private Uri getImageToShare(Bitmap bitmap) {
+        File imagefolder = new File(getCacheDir(), "images");
+        Uri uri = null;
+        try {
+            imagefolder.mkdirs();
+            File file = new File(imagefolder, "shared_image.png");
+            FileOutputStream outputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, outputStream);
+            outputStream.flush();
+            outputStream.close();
+            uri = FileProvider.getUriForFile(this, "com.example.sm4rt.shareimage.fileprovider", file);
+        } catch (Exception e) {
+            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        return uri;
     }
 
     public String loadJSONFromAsset() {
