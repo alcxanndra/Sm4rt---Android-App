@@ -130,6 +130,7 @@ public class TopicListFragment extends Fragment implements OnItemClickListener<T
 
     private void initializeTopicList(){
         try {
+            topicList.clear();
             JSONObject obj = new JSONObject(loadJSONFromAsset());
             JSONArray array = obj.getJSONArray("topics");
 

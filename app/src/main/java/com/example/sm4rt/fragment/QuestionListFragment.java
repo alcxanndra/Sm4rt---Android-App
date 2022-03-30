@@ -135,6 +135,7 @@ public class QuestionListFragment extends Fragment implements OnItemClickListene
 
     private void initializeQuestionList(String topicName){
         try {
+            questionList.clear();
             JSONObject obj = new JSONObject(loadJSONFromAsset());
             JSONArray array = obj.getJSONArray("questions");
 
