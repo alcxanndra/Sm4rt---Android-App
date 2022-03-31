@@ -45,7 +45,6 @@ public class TopicsPage extends AppCompatActivity implements BottomNavigationVie
         setContentView(R.layout.activity_topics_page);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.getMenu().getItem(0).setCheckable(false);
         bottomNavigationView.getMenu().getItem(1).setChecked(true);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
@@ -54,7 +53,6 @@ public class TopicsPage extends AppCompatActivity implements BottomNavigationVie
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.share:
-                bottomNavigationView.getMenu().getItem(1).setChecked(true);
                 String shareText = "https://sm4rt.com/download-app";
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
 

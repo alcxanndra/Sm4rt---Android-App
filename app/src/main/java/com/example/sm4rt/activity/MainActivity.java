@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
         myNotifyBuilder.setTicker("Remember to be Sm4rt!");
         myNotifyBuilder.setContentTitle("Remember to be Sm4rt!");
 //        myNotifyBuilder.setContentText("Learn a quick fact today in less than a minute to train your brain!");
-        myNotifyBuilder.setContentText("Learn a quick fact today in less than a minute to train your brain!\n" +  deeplink);
+        myNotifyBuilder.setContentText("Learn a quick fact today in less than a minute to train your brain!\n");
         myNotifyBuilder.setStyle(new NotificationCompat.BigTextStyle()
-                .bigText("Learn a quick fact today in less than a minute to train your brain!\n" +  deeplink));
+                .bigText("Learn a quick fact today in less than a minute to train your brain!\n"));
         myNotifyBuilder.setSmallIcon(R.drawable.ic_bulb);
         myNotifyBuilder.setContentIntent(myPendingIntent);
         myNotifyBuilder.build();
