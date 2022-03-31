@@ -55,7 +55,7 @@ public class TopicsPage extends AppCompatActivity implements BottomNavigationVie
         switch (item.getItemId()) {
             case R.id.share:
                 bottomNavigationView.getMenu().getItem(1).setChecked(true);
-                String shareText = "https://sm4rt.com/get_latest_version";
+                String shareText = "https://sm4rt.com/download-app";
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
                 Context c = bottomNavigationView.getContext();
