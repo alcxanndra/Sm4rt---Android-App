@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sm4rt.R;
-import com.example.sm4rt.model.QuestionModel;
+import com.example.sm4rt.database.data.Question;
 import com.example.sm4rt.util.OnItemClickListener;
 
 import java.util.ArrayList;
@@ -20,11 +20,11 @@ import java.util.List;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder> {
 
-    private List<QuestionModel> questionList;
+    private List<Question> questionList;
 
     public static OnItemClickListener onItemClickListener;
 
-    public QuestionAdapter(List<QuestionModel> questionList, OnItemClickListener onItemClickListener) {
+    public QuestionAdapter(List<Question> questionList, OnItemClickListener onItemClickListener) {
         this.questionList = questionList;
         this.onItemClickListener = onItemClickListener;
     }
@@ -45,7 +45,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             button = itemView.findViewById(R.id.button);
         }
 
-        public void bind(QuestionModel question){
+        public void bind(Question question){
             questionTitle.setText(question.getTitle());
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,7 +58,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
     }
 
     // Filter RecyclerView items
-    public void filterList(ArrayList<QuestionModel> filterList) {
+    public void filterList(ArrayList<Question> filterList) {
         questionList = filterList;
         // Notify adapter of change in recycler view data.
         notifyDataSetChanged();

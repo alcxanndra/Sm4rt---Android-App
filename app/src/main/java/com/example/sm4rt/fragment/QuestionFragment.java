@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.sm4rt.R;
-import com.example.sm4rt.model.QuestionModel;
+import com.example.sm4rt.database.data.Question;
 
 public class QuestionFragment extends Fragment {
 
@@ -33,7 +33,7 @@ public class QuestionFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null){
-            QuestionModel question = bundle.getParcelable(QUESTION);
+            Question question = bundle.getParcelable(QUESTION);
             ((TextView) view.findViewById(R.id.title)).setText(question.getTitle());
             ((TextView) view.findViewById(R.id.answer)).setText(question.getAnswer());
         }

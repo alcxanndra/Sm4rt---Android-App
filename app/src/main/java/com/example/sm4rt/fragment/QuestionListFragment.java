@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sm4rt.R;
 import com.example.sm4rt.adapter.QuestionAdapter;
-import com.example.sm4rt.model.QuestionModel;
+import com.example.sm4rt.database.data.Question;
 import com.example.sm4rt.util.OnItemClickListener;
 
 import org.json.JSONArray;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class QuestionListFragment extends Fragment implements OnItemClickListener<QuestionModel> {
+public class QuestionListFragment extends Fragment implements OnItemClickListener<Question> {
 
     private QuestionAdapter adapter;
     private RecyclerView rv;
@@ -44,7 +44,7 @@ public class QuestionListFragment extends Fragment implements OnItemClickListene
     private SearchView.OnQueryTextListener queryTextListener;
     public static String QUESTION = "question";
 
-    public static List<QuestionModel> questionList = new ArrayList<>();
+    public static List<Question> questionList = new ArrayList<>();
 
     public QuestionListFragment() {
         super(R.layout.fragment_question_list);
@@ -103,9 +103,9 @@ public class QuestionListFragment extends Fragment implements OnItemClickListene
     }
 
     private void filter(String text) {
-        ArrayList<QuestionModel> filteredList = new ArrayList<>();
+        ArrayList<Question> filteredList = new ArrayList<>();
 
-        for (QuestionModel item : questionList) {
+        for (Question item : questionList) {
             if (item.getTitle().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
             }
@@ -146,7 +146,7 @@ public class QuestionListFragment extends Fragment implements OnItemClickListene
                 String questionAnswer = questionJson.getString("answer");
 
                 if (topicName == null || (topicName != null && questionTopic.toLowerCase(Locale.ROOT).equals(topicName.toLowerCase()))) {
-                    questionList.add(new QuestionModel(questionTitle, questionTopic, questionAnswer));
+                    questionList.add(new Question(questionTitle, questionTopic, questionAnswer));
                 }
             }
         } catch (JSONException e) {
@@ -155,7 +155,7 @@ public class QuestionListFragment extends Fragment implements OnItemClickListene
     }
 
     @Override
-    public void onItemClick(QuestionModel item) {
+    public void onItemClick(Question item) {
         Bundle bundle = new Bundle();
 
         bundle.putParcelable(QUESTION, item);

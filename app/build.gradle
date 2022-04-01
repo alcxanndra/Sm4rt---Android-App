@@ -36,10 +36,15 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
 
     implementation "androidx.room:room-runtime:2.5.0-alpha01"
+    implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.8.1'
     annotationProcessor "androidx.room:room-compiler:2.5.0-alpha01"
 
-    implementation 'com.google.dagger:dagger:2.28.3'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.28.3'
+    def daggerVer = 2.27 // or latest version
+
+    implementation "com.google.dagger:dagger:$daggerVer"
+    implementation "com.google.dagger:dagger-android-support:$daggerVer"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVer"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVer"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

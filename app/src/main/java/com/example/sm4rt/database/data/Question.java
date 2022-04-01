@@ -1,29 +1,30 @@
-package com.example.sm4rt.model;
+package com.example.sm4rt.database.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class QuestionModel implements Parcelable  {
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    private Integer id;
-    private String title;
+import javax.inject.Inject;
+
+@Entity
+public class Question implements Parcelable {
+
+    @PrimaryKey(autoGenerate = true)    private int id;
     private String topic;
+
+    private String title;
+
     private String answer;
 
-    public QuestionModel(String title, String topic, String answer) {
-        this.title = title;
+    public Question(String topic, String title, String answer) {
         this.topic = topic;
+        this.title = title;
         this.answer = answer;
     }
 
-    public QuestionModel(Integer id, String title, String topic, String answer) {
-        this.id = id;
-        this.title = title;
-        this.topic = topic;
-        this.answer = answer;
-    }
-
-    public QuestionModel(Parcel parcel) {
+    public Question(Parcel parcel) {
         String[] data = new String[3];
         parcel.readStringArray(data);
 
@@ -32,12 +33,20 @@ public class QuestionModel implements Parcelable  {
         this.answer = data[2];
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public String getTitle() {
@@ -56,14 +65,6 @@ public class QuestionModel implements Parcelable  {
         this.answer = answer;
     }
 
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -76,13 +77,13 @@ public class QuestionModel implements Parcelable  {
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){
 
         @Override
-        public TopicModel createFromParcel(Parcel parcel) {
-            return new TopicModel(parcel);
+        public Question createFromParcel(Parcel parcel) {
+            return new Question(parcel);
         }
 
         @Override
-        public TopicModel[] newArray(int i) {
-            return new TopicModel[i];
+        public Question[] newArray(int i) {
+            return new Question[i];
         }
     };
 }

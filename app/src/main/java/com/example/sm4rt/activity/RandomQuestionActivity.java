@@ -19,9 +19,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.sm4rt.AppModule;
 import com.example.sm4rt.R;
+import com.example.sm4rt.RoomModule;
+import com.example.sm4rt.database.data.Question;
+import com.example.sm4rt.database.repository.QuestionRepository;
 import com.example.sm4rt.fragment.QuestionFragment;
-import com.example.sm4rt.model.QuestionModel;
+import com.example.sm4rt.util.Util;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
@@ -35,7 +39,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class RandomQuestionActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+
+    @Inject
+    QuestionRepository questionRepository;
 
     BottomNavigationView bottomNavigationView;
 
@@ -43,11 +52,16 @@ public class RandomQuestionActivity extends AppCompatActivity implements BottomN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random_question);
+//
+//        DaggerAppComponent.builder()
+//                .appModule(new AppModule(getApplication()))
+//                .roomModule(new RoomModule(getApplication()))
+//                .build()
+//                .inject(this);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.getMenu().getItem(2).setChecked(true);
-
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(QUESTION, getRandomQuestion());
@@ -60,63 +74,9 @@ public class RandomQuestionActivity extends AppCompatActivity implements BottomN
         fragmentTransaction.commit();
     }
 
-    private QuestionModel getRandomQuestion() {
-        List<QuestionModel> questionList = initializeQuestionList();
+    private Question getRandomQuestion() {
+        List<Question> questionList = questionRepository.findAll();
         return questionList.get((int) (Math.random() * questionList.size()));
-    }
-
-    // Retrieving the url to share
-    private Uri getImageToShare(Bitmap bitmap) {
-        File imagefolder = new File(getCacheDir(), "images");
-        Uri uri = null;
-        try {
-            imagefolder.mkdirs();
-            File file = new File(imagefolder, "shared_image.png");
-            FileOutputStream outputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, outputStream);
-            outputStream.flush();
-            outputStream.close();
-            uri = FileProvider.getUriForFile(this, "com.example.sm4rt.shareimage.fileprovider", file);
-        } catch (Exception e) {
-            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-        return uri;
-    }
-
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open("questions.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-
-    private List<QuestionModel> initializeQuestionList(){
-        List<QuestionModel> questionList = new ArrayList<>();
-        try {
-            JSONObject obj = new JSONObject(loadJSONFromAsset());
-            JSONArray array = obj.getJSONArray("questions");
-
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject questionJson = array.getJSONObject(i);
-                String questionTitle = questionJson.getString("title");
-                String questionTopic = questionJson.getString("topic");
-                String questionAnswer = questionJson.getString("answer");
-
-                questionList.add(new QuestionModel(questionTitle, questionTopic, questionAnswer));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return questionList;
     }
 
     @Override
@@ -132,10 +92,10 @@ public class RandomQuestionActivity extends AppCompatActivity implements BottomN
                 Drawable d = c.getResources().getDrawable(c.getResources().getIdentifier("logo", "drawable", c.getPackageName()));
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) d;
                 Bitmap bitmap = bitmapDrawable.getBitmap();
-                Uri uri = getImageToShare(bitmap);
+                Uri uri = Util.getImageToShare(this, bitmap);
 
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-                shareIntent.putExtra(Intent.EXTRA_TITLE, "Dear friend, join me on Sm4rt!");
+                shareIntent.putExtra(Intent.EXTRA_TITLE, "Join me on Sm4rt!");
                 shareIntent.setData(uri);
                 shareIntent.setType("image/*");
                 shareIntent.setClipData(ClipData.newRawUri("", uri));

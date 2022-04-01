@@ -10,20 +10,20 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sm4rt.database.data.Topic;
 import com.example.sm4rt.util.OnItemClickListener;
 import com.example.sm4rt.R;
-import com.example.sm4rt.model.TopicModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHolder> {
 
-    private List<TopicModel> topicList;
+    private List<Topic> topicList;
 
     public static OnItemClickListener onItemClickListener;
 
-    public TopicAdapter(List<TopicModel> topicList, OnItemClickListener onItemClickListener) {
+    public TopicAdapter(List<Topic> topicList, OnItemClickListener onItemClickListener) {
         this.topicList = topicList;
         this.onItemClickListener = onItemClickListener;
     }
@@ -49,10 +49,10 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
             layout = itemView.findViewById(R.id.container);
         }
 
-        public void bind(TopicModel topic){
+        public void bind(Topic topic){
             topicName.setText(topic.getName());
             topicDescription.setText(topic.getDescription());
-            topicImage.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), topic.getImageId()));
+            topicImage.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), topic.getImage()));
 
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -65,7 +65,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
     }
 
     // Filter RecyclerView items
-    public void filterList(ArrayList<TopicModel> filterList) {
+    public void filterList(ArrayList<Topic> filterList) {
         topicList = filterList;
         // Notify adapter of change in recycler view data.
         notifyDataSetChanged();
