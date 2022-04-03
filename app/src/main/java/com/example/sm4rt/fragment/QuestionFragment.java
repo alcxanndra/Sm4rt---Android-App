@@ -17,13 +17,15 @@ import com.example.sm4rt.database.data.Question;
 
 public class QuestionFragment extends Fragment {
 
+    public static String QUESTION = "question";
+
     public QuestionFragment() {
         super(R.layout.fragment_question);
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -32,10 +34,14 @@ public class QuestionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = getArguments();
+
         if (bundle != null){
             Question question = bundle.getParcelable(QUESTION);
             ((TextView) view.findViewById(R.id.title)).setText(question.getTitle());
             ((TextView) view.findViewById(R.id.answer)).setText(question.getAnswer());
+        } else {
+            System.out.println("Bundle is null");
         }
     }
+
 }

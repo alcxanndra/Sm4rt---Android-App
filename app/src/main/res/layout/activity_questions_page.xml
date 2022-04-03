@@ -12,14 +12,9 @@
         android:layout_height="match_parent"
         android:name="com.example.sm4rt.fragment.QuestionListFragment"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/bottom_menu"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu"/>
-
+        android:layout_height="match_parent"
+        android:name="com.example.sm4rt.fragment.BottomMenuFragment"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

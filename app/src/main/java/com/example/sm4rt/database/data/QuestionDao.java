@@ -17,7 +17,7 @@ public interface QuestionDao extends BaseDao<Question>{
     @Query("SELECT * FROM Question WHERE id=:id")
     Question findById(int id);
 
-    @Query("SELECT * FROM Question WHERE topic=:topic")
+    @Query("SELECT * FROM Question WHERE topic LIKE :topic")
     List<Question> findByTopic(String topic);
 
     @Query("SELECT * FROM Question WHERE title LIKE :keyword")

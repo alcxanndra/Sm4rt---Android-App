@@ -4,6 +4,7 @@ import static com.example.sm4rt.activity.TopicsPage.TOPICS_LIST;
 import static com.example.sm4rt.fragment.QuestionListFragment.QUESTION;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sm4rt.activity.QuestionsPage;
 import com.example.sm4rt.database.data.Question;
 import com.example.sm4rt.database.data.Topic;
 import com.example.sm4rt.util.OnItemClickListener;
@@ -96,7 +98,6 @@ public class TopicListFragment extends Fragment implements OnItemClickListener<T
 
     private void filter(String text) {
         ArrayList<Topic> filteredList = new ArrayList<>();
-
         for (Topic item : topicList) {
             if (item.getName().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
@@ -105,7 +106,6 @@ public class TopicListFragment extends Fragment implements OnItemClickListener<T
         if (filteredList.isEmpty()) {
             Toast.makeText(this.getActivity(), "No topics found", Toast.LENGTH_SHORT).show();
         }
-
         adapter.filterList(filteredList);
     }
 
@@ -113,27 +113,10 @@ public class TopicListFragment extends Fragment implements OnItemClickListener<T
         return c.getResources().getIdentifier(ImageName, "drawable", c.getPackageName());
     }
 
-    private void initializeTopicList(){
-        topicList.clear();
-//        topicList = getArguments().getParcelableArrayList(TOPICS_LIST);
-    }
-
     @Override
     public void onItemClick(Topic item) {
-        Bundle bundle = new Bundle();
-
-        bundle.putString(TOPIC_NAME, item.getName());
-
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        QuestionListFragment questionListFragment = new QuestionListFragment();
-        questionListFragment.setArguments(bundle);
-
-//        Give id of container to be replaced and fragment to replace with
-        fragmentTransaction.replace(R.id.fragment_container, questionListFragment)
-                .addToBackStack(null);
-        fragmentTransaction.commit();
+        Intent i = new Intent(getActivity().getBaseContext(), QuestionsPage.class);
+        i.putExtra(TOPIC_NAME, item.getName());
+        startActivity(i);
     }
-
 }

@@ -1,5 +1,7 @@
 package com.example.sm4rt.fragment;
 
+import static com.example.sm4rt.activity.QuestionsPage.QUESTIONS_LIST;
+import static com.example.sm4rt.activity.TopicsPage.TOPICS_LIST;
 import static com.example.sm4rt.fragment.TopicListFragment.TOPIC_NAME;
 
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sm4rt.R;
 import com.example.sm4rt.adapter.QuestionAdapter;
 import com.example.sm4rt.database.data.Question;
+import com.example.sm4rt.database.data.Topic;
 import com.example.sm4rt.util.OnItemClickListener;
 
 import org.json.JSONArray;
@@ -32,6 +35,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,7 +57,7 @@ public class QuestionListFragment extends Fragment implements OnItemClickListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_topic_list, container, false);
+        return inflater.inflate(R.layout.fragment_question_list, container, false);
     }
 
     @Override
@@ -67,13 +71,10 @@ public class QuestionListFragment extends Fragment implements OnItemClickListene
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = getArguments();
-        String topicName = null;
 
         if (bundle != null){
-            topicName = bundle.getString(TOPIC_NAME);
+            questionList = Arrays.asList((Question[]) bundle.getParcelableArray(QUESTIONS_LIST));
         }
-
-        initializeQuestionList(topicName);
 
         adapter = new QuestionAdapter(questionList, this);
         rv = view.findViewById(R.id.recycler_view);
@@ -116,48 +117,10 @@ public class QuestionListFragment extends Fragment implements OnItemClickListene
 
         adapter.filterList(filteredList);
     }
-    
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = getActivity().getAssets().open("questions.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-
-    private void initializeQuestionList(String topicName){
-        try {
-            questionList.clear();
-            JSONObject obj = new JSONObject(loadJSONFromAsset());
-            JSONArray array = obj.getJSONArray("questions");
-
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject questionJson = array.getJSONObject(i);
-                String questionTitle = questionJson.getString("title");
-                String questionTopic = questionJson.getString("topic");
-                String questionAnswer = questionJson.getString("answer");
-
-                if (topicName == null || (topicName != null && questionTopic.toLowerCase(Locale.ROOT).equals(topicName.toLowerCase()))) {
-                    questionList.add(new Question(questionTitle, questionTopic, questionAnswer));
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onItemClick(Question item) {
         Bundle bundle = new Bundle();
-
         bundle.putParcelable(QUESTION, item);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

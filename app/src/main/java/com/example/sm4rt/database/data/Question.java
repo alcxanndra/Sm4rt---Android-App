@@ -11,7 +11,8 @@ import javax.inject.Inject;
 @Entity
 public class Question implements Parcelable {
 
-    @PrimaryKey(autoGenerate = true)    private int id;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String topic;
 
     private String title;
@@ -28,8 +29,8 @@ public class Question implements Parcelable {
         String[] data = new String[3];
         parcel.readStringArray(data);
 
-        this.title = data[0];
-        this.topic = data[1];
+        this.topic = data[0];
+        this.title = data[1];
         this.answer = data[2];
     }
 
@@ -71,7 +72,7 @@ public class Question implements Parcelable {
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.title, this.topic, this.answer});
+        dest.writeStringArray(new String[]{this.topic, this.title, this.answer});
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){

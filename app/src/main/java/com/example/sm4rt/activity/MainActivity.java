@@ -1,5 +1,6 @@
 package com.example.sm4rt.activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
@@ -83,8 +84,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Topic... topics) {
             try {
-//                if (topicRepository.count() > topics.length)
-//                    topicRepository.deleteAll();
                 if (topicRepository.count() == 0)
                     topicRepository.insert(topics);
             } catch(Exception e){
@@ -92,11 +91,10 @@ public class MainActivity extends AppCompatActivity {
             }
             return "success";
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-            System.out.println(result);
-        }
+//        @Override
+//        protected void onPostExecute(String result) {
+//            System.out.println(result);
+//        }
     }
 
     private class InsertQuestionRequest extends AsyncTask<Question, Void, String> {
@@ -111,10 +109,10 @@ public class MainActivity extends AppCompatActivity {
             return "success";
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            System.out.println(result);
-        }
+//        @Override
+//        protected void onPostExecute(String result) {
+//            System.out.println(result);
+//        }
     }
 
     public void raiseNotification(View view) {
@@ -162,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         return topicList.toArray(new Topic[0]);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     Question[] readQuestions(){
         List<Question> questionList = new ArrayList<>();
 
@@ -173,11 +172,13 @@ public class MainActivity extends AppCompatActivity {
                 String questionTitle = questionJson.getString("title");
                 String questionTopic = questionJson.getString("topic");
                 String questionAnswer = questionJson.getString("answer");
-                questionList.add(new Question(questionTitle, questionTopic, questionAnswer));
+                questionList.add(new Question(questionTopic, questionTitle, questionAnswer));
             }
         } catch (JSONException e){
             e.printStackTrace();
         }
+        System.out.println("No of questions inserted: " + questionList.size());
+        questionList.forEach(question -> System.out.println("Question topic: " + question.getTopic()));
         return questionList.toArray(new Question[0]);
     }
 }

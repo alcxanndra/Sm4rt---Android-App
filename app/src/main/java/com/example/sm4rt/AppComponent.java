@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.example.sm4rt.activity.MainActivity;
+import com.example.sm4rt.activity.QuestionsPage;
+import com.example.sm4rt.activity.RandomQuestionActivity;
 import com.example.sm4rt.activity.TopicsPage;
 import com.example.sm4rt.database.data.QuestionDao;
 import com.example.sm4rt.database.data.TopicDao;
@@ -22,6 +24,10 @@ public interface AppComponent {
     void inject(MainActivity mainActivity);
 
     void inject(TopicsPage topicsPage);
+
+    void inject(QuestionsPage questionsPage);
+
+    void inject(RandomQuestionActivity randomQuestionActivity);
 
     TopicDao topicDao();
 
