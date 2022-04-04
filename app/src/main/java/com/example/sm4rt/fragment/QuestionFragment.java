@@ -1,5 +1,6 @@
 package com.example.sm4rt.fragment;
 
+import static com.example.sm4rt.activity.RandomQuestionActivity.RANDOM_QUESTION;
 import static com.example.sm4rt.fragment.QuestionListFragment.QUESTION;
 
 import android.os.Bundle;
@@ -26,7 +27,13 @@ public class QuestionFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return inflater.inflate(R.layout.fragment_question, container, false);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -36,11 +43,9 @@ public class QuestionFragment extends Fragment {
         Bundle bundle = getArguments();
 
         if (bundle != null){
-            Question question = bundle.getParcelable(QUESTION);
+            Question question = bundle.getParcelable(RANDOM_QUESTION);
             ((TextView) view.findViewById(R.id.title)).setText(question.getTitle());
             ((TextView) view.findViewById(R.id.answer)).setText(question.getAnswer());
-        } else {
-            System.out.println("Bundle is null");
         }
     }
 

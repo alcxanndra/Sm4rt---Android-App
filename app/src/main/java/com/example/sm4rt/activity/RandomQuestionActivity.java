@@ -50,6 +50,8 @@ public class RandomQuestionActivity extends AppCompatActivity{
     @Inject
     QuestionRepository questionRepository;
 
+    public static String RANDOM_QUESTION = "random question";
+
     ArrayList<Question> questionsList = new ArrayList<>();
 
     @Override
@@ -63,10 +65,10 @@ public class RandomQuestionActivity extends AppCompatActivity{
                 .build()
                 .inject(this);
 
-        new Request().execute();
+        new FindRandomQuestionRequest().execute();
     }
 
-    private class Request extends AsyncTask<Void, Void, List<Question>> {
+    private class FindRandomQuestionRequest extends AsyncTask<Void, Void, List<Question>> {
         @Override
         protected List<Question> doInBackground(Void... voids) {
             return questionRepository.findAll();
@@ -78,7 +80,10 @@ public class RandomQuestionActivity extends AppCompatActivity{
             questionsList.addAll(questions);
 
             Bundle bundle = new Bundle();
-            bundle.putParcelable(QUESTION, getRandomQuestion());
+
+            Question question = questionsList.get((int) (Math.random() * questionsList.size()));
+            bundle.putParcelable(RANDOM_QUESTION, question);
+            System.out.println("Code got till here...");
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -89,9 +94,4 @@ public class RandomQuestionActivity extends AppCompatActivity{
             fragmentTransaction.commit();
         }
     }
-
-    private Question getRandomQuestion() {
-        return questionsList.get((int) (Math.random() * questionsList.size()));
-    }
-
 }
