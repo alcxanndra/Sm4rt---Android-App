@@ -1,5 +1,6 @@
 package com.example.sm4rt.activity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.sm4rt.AppModule;
 import com.example.sm4rt.DaggerAppComponent;
@@ -26,6 +28,13 @@ import com.example.sm4rt.database.data.Topic;
 import com.example.sm4rt.database.repository.QuestionRepository;
 import com.example.sm4rt.database.repository.TopicRepository;
 import com.example.sm4rt.util.Util;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.util.concurrent.ListenableFuture;
 
 import org.json.JSONArray;
@@ -38,7 +47,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     @Inject
     TopicRepository topicRepository;
@@ -47,12 +56,18 @@ public class MainActivity extends AppCompatActivity {
     QuestionRepository questionRepository;
 
     private Button playButton;
+    private SignInButton signInButton;
 
     private static final int NOTIFICATION_ID = 12345;
     private static final String MY_CHANNEL = "";
     private int notifyCount = 0;
     private NotificationManager notificationManager = null;
 
+    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleApiClient googleApiClient;
+    private static final int RC_SIGN_IN = 1;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +79,22 @@ public class MainActivity extends AppCompatActivity {
                 .build()
                 .inject(this);
 
+        GoogleSignInOptions gso =  new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleApiClient=new GoogleApiClient.Builder(this)
+                .enableAutoManage(this,this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .build();
+
+        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                startActivityForResult(intent,RC_SIGN_IN);
+            }
+        });
 
         playButton = findViewById(R.id.play_button);
         playButton.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +109,36 @@ public class MainActivity extends AppCompatActivity {
 
         new InsertTopicRequest().execute(readTopics());
         new InsertQuestionRequest().execute(readQuestions());
+    }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==RC_SIGN_IN){
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+    private void handleSignInResult(GoogleSignInResult result){
+        if(result.isSuccess()){
+            gotoProfile();
+        }else{
+            Toast.makeText(getApplicationContext(),"Sign in cancel",Toast.LENGTH_LONG).show();
+        }
+    }
+    private void gotoProfile(){
+        Intent intent=new Intent(MainActivity.this,ProfileActivity.class);
+        startActivity(intent);
     }
 
     private class InsertTopicRequest extends AsyncTask<Topic, Void, String> {

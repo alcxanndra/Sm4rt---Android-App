@@ -13,15 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sm4rt">
         <activity
+            android:name=".activity.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.RandomQuestionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "sm4rt.me://discover” -->
-                <data android:scheme="sm4rt.me"
-                    android:host="discover" />
+                <data
+                    android:host="discover"
+                    android:scheme="sm4rt.me" />
             </intent-filter>
         </activity>
         <activity
