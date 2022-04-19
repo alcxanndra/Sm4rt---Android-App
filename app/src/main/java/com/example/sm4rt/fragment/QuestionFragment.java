@@ -39,8 +39,8 @@ public class QuestionFragment extends Fragment {
 
         if (bundle != null){
             QuestionApiModel question = bundle.getParcelable(QUESTION);
-            ((TextView) view.findViewById(R.id.title)).setText(question.getQuestion());
-            ((TextView) view.findViewById(R.id.answer)).setText(question.getCorrectAnswer());
+            ((TextView) view.findViewById(R.id.title)).setText(question.getQuestion().replace("&#039;","'").replace("&quot;","'"));
+            ((TextView) view.findViewById(R.id.answer)).setText(question.getCorrectAnswer().replace("&#039;","'").replace("&quot;","'"));
         } else {
             System.out.println("Bundle is null");
         }
