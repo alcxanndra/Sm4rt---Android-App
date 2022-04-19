@@ -9,7 +9,6 @@ public class ApiBuilder {
 
     private static ApiService apiBuilder;
     private final static String BASE_URL = "https://opentdb.com/";
-//    public final static String API_KEY = "eNkbLEYWK39vfGeew22rVw==FsIcspsPsQFqA9zX";
 
     public static ApiService getInstance(){
         if(apiBuilder == null){

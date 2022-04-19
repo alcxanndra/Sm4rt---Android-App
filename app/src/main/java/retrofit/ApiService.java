@@ -9,5 +9,5 @@ public interface ApiService {
 
     @GET("/api.php")
     Call<SearchQuestionModel> getQuestionList(
-            @Query("amount") String limit);
+            @Query("amount") String amount);
 }
