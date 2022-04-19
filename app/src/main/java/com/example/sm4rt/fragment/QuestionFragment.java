@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import com.example.sm4rt.R;
 import com.example.sm4rt.database.data.Question;
 
+import retrofit.QuestionApiModel;
+
 public class QuestionFragment extends Fragment {
 
     public static String QUESTION = "question";
@@ -36,9 +38,9 @@ public class QuestionFragment extends Fragment {
         Bundle bundle = getArguments();
 
         if (bundle != null){
-            Question question = bundle.getParcelable(QUESTION);
-            ((TextView) view.findViewById(R.id.title)).setText(question.getTitle());
-            ((TextView) view.findViewById(R.id.answer)).setText(question.getAnswer());
+            QuestionApiModel question = bundle.getParcelable(QUESTION);
+            ((TextView) view.findViewById(R.id.title)).setText(question.getQuestion());
+            ((TextView) view.findViewById(R.id.answer)).setText(question.getCorrectAnswer());
         } else {
             System.out.println("Bundle is null");
         }

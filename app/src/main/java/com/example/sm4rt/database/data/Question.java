@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.squareup.moshi.Json;
+
 import javax.inject.Inject;
 
 @Entity
@@ -13,10 +15,14 @@ public class Question implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
+    @Json(name = "category")
     private String topic;
 
+    @Json(name = "question")
     private String title;
 
+    @Json(name = "correct_answer")
     private String answer;
 
     public Question(String topic, String title, String answer) {

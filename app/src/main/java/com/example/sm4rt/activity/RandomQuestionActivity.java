@@ -45,12 +45,19 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import retrofit.ApiBuilder;
+import retrofit.QuestionApiModel;
+import retrofit.SearchQuestionModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RandomQuestionActivity extends AppCompatActivity{
 
     @Inject
     QuestionRepository questionRepository;
 
-    ArrayList<Question> questionsList = new ArrayList<>();
+    ArrayList<QuestionApiModel> questionsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,34 +70,61 @@ public class RandomQuestionActivity extends AppCompatActivity{
                 .build()
                 .inject(this);
 
-        new Request().execute();
+        Call<SearchQuestionModel> call = ApiBuilder.getInstance().getQuestionList("10");
+        call.enqueue(new Callback<SearchQuestionModel>() {
+            @Override
+            public void onResponse(Call<SearchQuestionModel> call, Response<SearchQuestionModel> response) {
+                List<QuestionApiModel> list = response.body().getResults();
+                System.out.println("List size: " + list.size());
+                questionsList.clear();
+                questionsList.addAll(list);
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(QUESTION, getRandomQuestion());
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                QuestionFragment questionFragment = new QuestionFragment();
+                questionFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.fragment_container, questionFragment)
+                        .addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+
+            @Override
+            public void onFailure(Call<SearchQuestionModel> call, Throwable t) {
+                System.out.println("Failed call");
+            }
+        });
+
+//        new Request().execute();
     }
 
-    private class Request extends AsyncTask<Void, Void, List<Question>> {
-        @Override
-        protected List<Question> doInBackground(Void... voids) {
-            return questionRepository.findAll();
-        }
+//    private class Request extends AsyncTask<Void, Void, List<Question>> {
+//        @Override
+//        protected List<Question> doInBackground(Void... voids) {
+//            return questionRepository.findAll();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(List<Question> questions) {
+//            questionsList.clear();
+//            questionsList.addAll(questions);
+//
+//            Bundle bundle = new Bundle();
+//            bundle.putParcelable(QUESTION, getRandomQuestion());
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//            QuestionFragment questionFragment = new QuestionFragment();
+//            questionFragment.setArguments(bundle);
+//            fragmentTransaction.replace(R.id.fragment_container, questionFragment)
+//                    .addToBackStack(null);
+//            fragmentTransaction.commit();
+//        }
+//    }
 
-        @Override
-        protected void onPostExecute(List<Question> questions) {
-            questionsList.clear();
-            questionsList.addAll(questions);
-
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(QUESTION, getRandomQuestion());
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            QuestionFragment questionFragment = new QuestionFragment();
-            questionFragment.setArguments(bundle);
-            fragmentTransaction.replace(R.id.fragment_container, questionFragment)
-                    .addToBackStack(null);
-            fragmentTransaction.commit();
-        }
-    }
-
-    private Question getRandomQuestion() {
+    private QuestionApiModel getRandomQuestion() {
         return questionsList.get((int) (Math.random() * questionsList.size()));
     }
 
