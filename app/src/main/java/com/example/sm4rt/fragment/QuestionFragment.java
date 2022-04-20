@@ -1,8 +1,7 @@
 package com.example.sm4rt.fragment;
 
-import static com.example.sm4rt.fragment.QuestionListFragment.QUESTION;
-
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sm4rt.R;
 import com.example.sm4rt.database.data.Question;
-
-import retrofit.QuestionApiModel;
 
 public class QuestionFragment extends Fragment {
 
@@ -38,11 +35,11 @@ public class QuestionFragment extends Fragment {
         Bundle bundle = getArguments();
 
         if (bundle != null){
-            QuestionApiModel question = bundle.getParcelable(QUESTION);
-            ((TextView) view.findViewById(R.id.title)).setText(question.getQuestion().replace("&#039;","'").replace("&quot;","'"));
-            ((TextView) view.findViewById(R.id.answer)).setText(question.getCorrectAnswer().replace("&#039;","'").replace("&quot;","'"));
+            Question question = bundle.getParcelable(QUESTION);
+            ((TextView) view.findViewById(R.id.title)).setText(question.getTitle().replace("&#039;","'").replace("&quot;","'"));
+            ((TextView) view.findViewById(R.id.answer)).setText(question.getAnswer().replace("&#039;","'").replace("&quot;","'"));
         } else {
-            System.out.println("Bundle is null");
+            Log.d("ERROR","Bundle is null");
         }
     }
 

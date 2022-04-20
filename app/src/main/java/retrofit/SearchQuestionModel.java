@@ -6,10 +6,10 @@ import java.util.List;
 
 public class SearchQuestionModel {
 
-    private List<QuestionApiModel> results;
+    private List<Question> results;
     private Long response_code;
 
-    public List<QuestionApiModel> getResults() {
+    public List<Question> getResults() {
         return results;
     }
 

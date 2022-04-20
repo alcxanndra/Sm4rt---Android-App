@@ -46,7 +46,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import retrofit.ApiBuilder;
-import retrofit.QuestionApiModel;
 import retrofit.SearchQuestionModel;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,7 +56,7 @@ public class RandomQuestionActivity extends AppCompatActivity{
     @Inject
     QuestionRepository questionRepository;
 
-    ArrayList<QuestionApiModel> questionsList = new ArrayList<>();
+    ArrayList<Question> questionsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +73,7 @@ public class RandomQuestionActivity extends AppCompatActivity{
         call.enqueue(new Callback<SearchQuestionModel>() {
             @Override
             public void onResponse(Call<SearchQuestionModel> call, Response<SearchQuestionModel> response) {
-                List<QuestionApiModel> list = response.body().getResults();
-                System.out.println("List size: " + list.size());
+                List<Question> list = response.body().getResults();
                 questionsList.clear();
                 questionsList.addAll(list);
 
@@ -124,7 +122,7 @@ public class RandomQuestionActivity extends AppCompatActivity{
 //        }
 //    }
 
-    private QuestionApiModel getRandomQuestion() {
+    private Question getRandomQuestion() {
         return questionsList.get((int) (Math.random() * questionsList.size()));
     }
 

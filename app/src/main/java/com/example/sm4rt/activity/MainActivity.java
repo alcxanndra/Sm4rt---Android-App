@@ -238,8 +238,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         } catch (JSONException e){
             e.printStackTrace();
         }
-        System.out.println("No of questions inserted: " + questionList.size());
-        questionList.forEach(question -> System.out.println("Question topic: " + question.getTopic()));
+//        System.out.println("No of questions inserted: " + questionList.size());
+//        questionList.forEach(question -> System.out.println("Question topic: " + question.getTopic()));
         return questionList.toArray(new Question[0]);
     }
 }
